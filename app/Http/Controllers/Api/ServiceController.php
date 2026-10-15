@@ -3,47 +3,46 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Service;
+use Illuminate\Http\JsonResponse;
 
 class ServiceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar layanan aktif.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $services = Service::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Daftar layanan berhasil diambil.',
+            'data' => $services,
+        ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menampilkan detail satu layanan.
      */
-    public function store(Request $request)
+    public function show(string $id): JsonResponse
     {
-        //
-    }
+        $service = Service::where('is_active', true)
+            ->find($id);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if (!$service) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Layanan tidak ditemukan.',
+            ], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail layanan berhasil diambil.',
+            'data' => $service,
+        ], 200);
     }
 }
