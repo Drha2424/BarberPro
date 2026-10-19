@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\AdminSlotController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 // Publik
@@ -15,6 +16,9 @@ Route::get('/slots', [ReservationController::class, 'availability']);
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+
+Route::post('/forgot-password', [PasswordResetController::class, 'forgot'])->middleware('throttle:5,1');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:5,1');
 
 // Wajib login (pelanggan dan admin)
 Route::middleware('auth:sanctum')->group(function () {
